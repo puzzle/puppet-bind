@@ -34,7 +34,7 @@ class bind::base {
 		pattern => named,
     hasstatus => false,
     require => Package[bind],
-		subscribe => Exec["concat_/etc/bind/named.conf.local"],
+		#subscribe => Exec["concat_/etc/bind/named.conf.local"],
 	}
 }
 
