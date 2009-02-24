@@ -27,17 +27,20 @@ class bind {
 }
 
 class bind::base {
-  package{ ['bind', 'bind-utils']:
-    ensure => present,
-  }
+    package{ ['bind', 'bind-utils']:
+        ensure => present,
+    }
 
-	service { "bind":
-		ensure => running,
-		pattern => named,
-    hasstatus => false,
-    require => Package[bind],
-		#subscribe => Exec["concat_/etc/bind/named.conf.local"],
-	}
+    service { "bind":
+        ensure => running,
+        pattern => named,
+        hasstatus => false,
+        require => Package[bind],
+    }
+
+    if $use_nagios {
+        nagios::service { "check_dns": }
+    }
 }
 
 class bind::centos inherits bind::base {
