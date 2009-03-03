@@ -26,7 +26,7 @@ class bind::chroot::base inherits bind::base {
         require +> Package['bind-chroot'],
     }
 
-    files{'/var/named/chroot/var/named/slaves/':
+    file{'/var/named/chroot/var/named/slaves/':
         ensure => directory,
         require => Package['bind-chroot'],
         owner => named, group => named, mode => 0770;
