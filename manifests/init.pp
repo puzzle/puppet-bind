@@ -53,7 +53,7 @@ class bind::base {
         recurse => true,
         purge => true,
         force => true,
-        owner => root, group => 0, mode => 0644; 
+        owner => root, group => named, mode => 0640; 
     }
 
     if $use_nagios {
