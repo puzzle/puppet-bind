@@ -42,6 +42,28 @@ class bind::base {
         require => Package['bind'],
     }
 
+    file{'named.conf':
+        path => '/etc/named.conf',
+        source => [ "puppet://$server/files/bind/etc/${fqdn}/named.conf",
+                    "puppet://$server/files/bind/etc/${domain}/named.conf",
+                    "puppet://$server/files/bind/etc/${bind_zone_files_tag}/named.conf",
+                    "puppet://$server/files/bind/etc/default/named.conf" ],
+        require => Package['bind'],
+        notify => Service['bind'],
+        owner => root, group => named, mode => 0640;
+    }
+    file{'named.local':
+        path => '/etc/named.local',
+        source => [ "puppet://$server/files/bind/etc/${fqdn}/named.local",
+                    "puppet://$server/files/bind/etc/${domain}/named.local",
+                    "puppet://$server/files/bind/etc/${bind_zone_files_tag}/named.local",
+                    "puppet://$server/files/bind/etc/default/named.local" ],
+        require => Package['bind'],
+        notify => Service['bind'],
+        owner => root, group => named, mode => 0640;
+    }
+
+
     file{'zone_files':
         path => '/var/named/',
         source => [ "puppet://$server/files/bind/zone_files/${fqdn}/",
