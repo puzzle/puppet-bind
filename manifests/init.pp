@@ -18,6 +18,9 @@ modules_dir { [ "bind", "bind/zones", "bind/options.d" ]: }
 
 import 'defines/*.pp'
 
+# bind will deploy zones files from a source
+# you can have a common pool of zone files set by
+# $bind_zone_files_tag or in default
 class bind {
   case $operatingsystem {
     centos: { include bind::centos }
@@ -40,7 +43,7 @@ class bind::base {
     }
 
     file{'zone_files':
-        path => '/var/named/'
+        path => '/var/named/',
         source => [ "puppet://$server/files/bind/zone_files/${fqdn}/",
                     "puppet://$server/files/bind/zone_files/${domain}/",
                     "puppet://$server/files/bind/zone_files/${bind_zone_files_tag}/",
