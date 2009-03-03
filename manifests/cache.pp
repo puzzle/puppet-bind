@@ -5,5 +5,6 @@ class bind::cache {
     package{'caching-nameserver':
         ensure => installed,
         require => Package['bind'],
+        notify => Service['bind'],
     }
 }
