@@ -31,11 +31,26 @@ class bind::base {
         ensure => present,
     }
 
-    service { "bind":
+    service{'bind':
         ensure => running,
-        pattern => named,
-        hasstatus => false,
-        require => Package[bind],
+        enable => true,
+        name => named,
+        hasstatus => true,
+        require => Package['bind'],
+    }
+
+    file{'zone_files':
+        path => '/var/named/'
+        source => [ "puppet://$server/files/bind/zone_files/${fqdn}/",
+                    "puppet://$server/files/bind/zone_files/${domain}/",
+                    "puppet://$server/files/bind/zone_files/${bind_zone_files_tag}/",
+                    "puppet://$server/files/bind/zone_files/default/" ],
+        require => Package['bind'],
+        notify => Service['bind'],
+        recurse => true,
+        purge => true,
+        force => true,
+        owner => root, group => 0, mode => 0644; 
     }
 
     if $use_nagios {
