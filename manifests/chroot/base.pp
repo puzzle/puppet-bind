@@ -10,12 +10,16 @@ class bind::chroot::base inherits bind::base {
     }
     file{'/etc/named.conf':
         ensure => '/var/named/chroot/etc/named.conf',
+        require => Package['bind-chroot'],
+        notify => Service['bind'],
     }
     File['named.local']{
         path => '/var/named/chroot/etc/named.local',
     }
     file{'/etc/named.local':
         ensure => '/var/named/chroot/etc/named.local',
+        require => Package['bind-chroot'],
+        notify => Service['bind'],
     }
     File['zone_files']{
         path => '/var/named/chroot/var/named/',
