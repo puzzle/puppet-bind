@@ -74,7 +74,6 @@ class bind::base {
         notify => Service['bind'],
         recurse => true,
         purge => true,
-        force => true,
         owner => root, group => named, mode => 0640; 
     }
 
