@@ -63,6 +63,9 @@ class bind::base {
         owner => root, group => named, mode => 0640;
     }
 
+    case $bind_zone_files_tag {
+        '': { $bind_zone_files_tag = 'bind_zone_files_tag_is_not_set' }
+    }
 
     file{'zone_files':
         path => '/var/named/',
