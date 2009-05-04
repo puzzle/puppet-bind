@@ -76,6 +76,7 @@ class bind::base {
         require => Package['bind'],
         notify => Service['bind'],
         recurse => true,
+        force => true,
         purge => true,
         owner => root, group => named, mode => 0640; 
     }
