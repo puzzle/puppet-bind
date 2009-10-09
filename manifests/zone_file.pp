@@ -1,4 +1,10 @@
-define bind::zone_file($ensure = 'present', $content = '', $source = '', $master = false, $public = true) {
+define bind::zone_file(
+    $ensure = 'present', 
+    $content, 
+    $source, 
+    $master = false, 
+    $public = true
+) {
     err ("deprecated")
     include bind
 
