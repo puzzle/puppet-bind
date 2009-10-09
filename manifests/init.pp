@@ -12,95 +12,12 @@
 # the Free Software Foundation.
 #
 
-import "zone.pp"
+modules_dir { [ 'bind', 'bind/zones', 'bind/options.d' ]: }
 
-modules_dir { [ "bind", "bind/zones", "bind/options.d" ]: }
-
-import 'defines/*.pp'
-
-# bind will deploy zones files from a source
-# you can have a common pool of zone files set by
-# $bind_zone_files_tag or in default
 class bind {
   case $operatingsystem {
-    centos: { include bind::centos }
-    debian,ubuntu: { include bind::debian }
+    centos: { include bind::base::centos }
+    debian,ubuntu: { include bind::base::debian }
     default: { include bind::base }
-  }
-}
-
-class bind::base {
-    package{ ['bind', 'bind-utils']:
-        ensure => present,
-    }
-
-    service{'bind':
-        ensure => running,
-        enable => true,
-        name => named,
-        hasstatus => true,
-        require => Package['bind'],
-    }
-
-    file{'named.conf':
-        path => '/etc/named.conf',
-        source => [ "puppet://$server/files/bind/etc/${fqdn}/named.conf",
-                    "puppet://$server/files/bind/etc/${domain}/named.conf",
-                    "puppet://$server/files/bind/etc/${bind_zone_files_tag}/named.conf",
-                    "puppet://$server/files/bind/etc/default/named.conf" ],
-        require => Package['bind'],
-        notify => Service['bind'],
-        owner => root, group => named, mode => 0640;
-    }
-    file{'named.local':
-        path => '/etc/named.local',
-        source => [ "puppet://$server/files/bind/etc/${fqdn}/named.local",
-                    "puppet://$server/files/bind/etc/${domain}/named.local",
-                    "puppet://$server/files/bind/etc/${bind_zone_files_tag}/named.local",
-                    "puppet://$server/files/bind/etc/default/named.local" ],
-        require => Package['bind'],
-        notify => Service['bind'],
-        owner => root, group => named, mode => 0640;
-    }
-
-    case $bind_zone_files_tag {
-        '': { $bind_zone_files_tag = 'bind_zone_files_tag_is_not_set' }
-    }
-
-    file{'zone_files':
-        path => '/var/named/',
-        source => [ "puppet://$server/files/bind/zone_files/${fqdn}/",
-                    "puppet://$server/files/bind/zone_files/${domain}/",
-                    "puppet://$server/files/bind/zone_files/${bind_zone_files_tag}/",
-                    "puppet://$server/files/bind/zone_files/default/" ],
-        require => Package['bind'],
-        notify => Service['bind'],
-        recurse => true,
-        force => true,
-        purge => true,
-        owner => root, group => named, mode => 0640; 
-    }
-
-    if $use_nagios {
-        nagios::service { "check_dns": }
-    }
-}
-
-class bind::centos inherits bind::base {
-  Service[bind]{
-    name => 'named',
-  }
-}
-
-class bind::debian inherits bind::base {
-  Package[bind]{
-    name => 'bind9',
-  }
-  Package[bind-utils]{
-    name => 'dnsutils',
-  }
-
-  Service[bind]{
-    name => 'bind9',
   }
 }
