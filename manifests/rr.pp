@@ -3,6 +3,7 @@ define bind::rr(
     $ensure = 'present',
     $content)
 {
+    include bind::module_dir
     err ("deprecated")
     $zone_file    = "/var/lib/puppet/modules/bind/zones/${domain}"
     $rrs_dir      = "/var/lib/puppet/modules/bind/${domain}/rrs"

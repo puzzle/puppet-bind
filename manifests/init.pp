@@ -12,8 +12,6 @@
 # the Free Software Foundation.
 #
 
-modules_dir { [ 'bind', 'bind/zones', 'bind/options.d' ]: }
-
 class bind {
   case $operatingsystem {
     centos: { include bind::base::centos }

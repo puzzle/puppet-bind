@@ -6,6 +6,7 @@ $zone_conf_d = "/var/lib/puppet/modules/bind/zone/conf.d"
 
 # include this class to collect and configure all defined zones
 class bind::master {
+    include bind::module_dir
 	modules_dir { [ "bind/zone", "bind/zone/conf.d", "bind/zone/contents", "bind/zone/contents.d" ]: }
 
 	# todo: fix this!
@@ -25,7 +26,7 @@ class bind::master {
 # top-level define for a DNS zone. Use this to export the basic structures to
 # your bind::master
 define bind::zone() {
-
+    include bind::module_dir
 	$zone_file = "/var/lib/puppet/modules/bind/zone/contents/${name}"
 	$zone_contents_d = "/var/lib/puppet/modules/bind/zone/contents.d/${name}"
 
