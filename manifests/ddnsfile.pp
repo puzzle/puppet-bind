@@ -11,9 +11,9 @@ define bind::ddnsfile(
         $require = Package[bind-chroot]
     }
     file{$target:
-        source => [ "puppet://$server/modules/site-bind/ddns/${fqdn}/${name}",
-                    "puppet://$server/modules/site-bind/ddns/${domain}/${name}",
-                    "puppet://$server/modules/site-bind/ddns/default/${name}" ],
+        source => [ "puppet:///modules/site-bind/ddns/${fqdn}/${name}",
+                    "puppet:///modules/site-bind/ddns/${domain}/${name}",
+                    "puppet:///modules/site-bind/ddns/default/${name}" ],
         replace => false,
         require => $require,
         notify => Service[bind],
